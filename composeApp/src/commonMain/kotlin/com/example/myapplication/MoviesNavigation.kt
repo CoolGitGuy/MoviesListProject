@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.list.MoviesListScreen
 
 @Composable
 fun MoviesNavigation(startDestination: String,) {
@@ -14,7 +15,7 @@ fun MoviesNavigation(startDestination: String,) {
         startDestination = startDestination
     ) {
         composable(route = "movies") {
-            //TODO: MoviesScreen(navController = navController)
+            MoviesListScreen()
         }
 
         composable(route = "movies/{id}") {
