@@ -41,6 +41,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.materialIconsCore)
             implementation(libs.navigation.compose)
+            implementation(libs.napier)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

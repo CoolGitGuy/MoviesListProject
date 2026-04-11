@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.domain.Movie
+import io.github.aakira.napier.Napier
 import myapplication.composeapp.generated.resources.Res
 import myapplication.composeapp.generated.resources.compose_multiplatform
 import myapplication.composeapp.generated.resources.logoimdb
@@ -46,7 +47,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MoviesListScreen() {
+fun MoviesListScreen(onMovieClick: (movieId: Int) -> Unit) {
     MoviesListScreen(
         state = MoviesListContract.UiState(movies = listOf(
             Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
@@ -54,7 +55,23 @@ fun MoviesListScreen() {
             Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
             Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
             Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
-        ))
+            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
+            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
+            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
+            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
+            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
+            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
+            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
+            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
+            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
+            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
+            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
+            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
+            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
+            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
+            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
+        )),
+        onMovieClick = onMovieClick
 
     )
 }
@@ -62,7 +79,8 @@ fun MoviesListScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MoviesListScreen(
-    state: MoviesListContract.UiState
+    state: MoviesListContract.UiState,
+    onMovieClick: (movieId: Int) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -101,7 +119,7 @@ private fun MoviesListScreen(
                 Text("No Movies Found", modifier = Modifier.padding(start = 8.dp))
             }
         }
-        else ScreenContent(modifier = Modifier.padding(innerPadding), state = state)
+        else ScreenContent(modifier = Modifier.padding(innerPadding), state = state, onMovieClick = onMovieClick)
 
     }
 }
@@ -167,7 +185,7 @@ fun SortChipMenu(
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiState) {
+fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiState,onMovieClick: (movieId: Int) -> Unit = { }) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Text("100 movies")
         state.movies.forEach { movie ->
@@ -176,7 +194,8 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
                 overline = movie.releaseYear.toString(),
                 supporting = movie.genre,
                 trailing1 = movie.rating.toString(),
-                trailing2 = "${movie.votes} votes"
+                trailing2 = "${movie.votes} votes",
+                onClick = { onMovieClick(movie.id) }
             )
         }
 
@@ -184,12 +203,17 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
 }
 
 @Composable
-fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform, headline : String = "headline", overline : String = "overline", supporting : String = "supporting", trailing1 : String = "trailing", trailing2 : String = "trailing2") {
+fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
+                  headline : String = "headline", overline : String = "overline",
+                  supporting : String = "supporting",
+                  trailing1 : String = "trailing",
+                      trailing2 : String = "trailing2",
+                      onClick : () -> Unit) {
     Surface(modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
         ListItem(
-            modifier = Modifier.fillMaxWidth().clickable(onClick = { /* klik na list item */ }),
+            modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
             headlineContent = { Text(headline) },
             overlineContent = { Text(overline) },
             supportingContent = { Text(supporting) },
