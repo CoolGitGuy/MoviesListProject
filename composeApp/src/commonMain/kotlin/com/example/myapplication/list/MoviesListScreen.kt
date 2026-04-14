@@ -29,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,30 +48,14 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MoviesListScreen(onMovieClick: (movieId: Int) -> Unit) {
+fun MoviesListScreen(
+    viewModel: MoviesListViewModel,
+    onMovieClick: (movieId: Int) -> Unit
+) {
+    val state by viewModel.state.collectAsState()
+
     MoviesListScreen(
-        state = MoviesListContract.UiState(movies = listOf(
-            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
-            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
-            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
-            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
-            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
-            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
-            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
-            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
-            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
-            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
-            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
-            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
-            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
-            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
-            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
-            Movie(1, "The Shawshank Redemption", 1994, "Drama", 9.3, 2345678,""),
-            Movie(2, "The Godfather", 1972, "Crime", 9.2, 1623456,""),
-            Movie(3, "The Dark Knight", 2008, "Action", 9.0, 2345678,""),
-            Movie(4, "Pulp Fiction", 1994, "Crime", 8.9, 1789456,""),
-            Movie(5, "Forrest Gump", 1994, "Drama", 8.8, 1893456,""),
-        )),
+        state = state,
         onMovieClick = onMovieClick
 
     )
