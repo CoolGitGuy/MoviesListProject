@@ -4,5 +4,5 @@ import com.example.myapplication.list.SortOption
 
 interface MovieRepository {
     suspend fun getMovies(sort: SortOption): List<Movie>
-    suspend fun getById(id: Int): Movie?
+    suspend fun getById(id: String): Movie?
 }

@@ -50,7 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun MoviesListScreen(
     viewModel: MoviesListViewModel,
-    onMovieClick: (movieId: Int) -> Unit
+    onMovieClick: (movieId: String) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -69,7 +69,7 @@ fun MoviesListScreen(
 @Composable
 private fun MoviesListScreen(
     state: MoviesListContract.UiState,
-    onMovieClick: (movieId: Int) -> Unit,
+    onMovieClick: (movieId: String) -> Unit,
     onSortSelected: (SortOption) -> Unit
 ) {
     Scaffold(
@@ -175,7 +175,7 @@ fun SortChipMenu(
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiState,onMovieClick: (movieId: Int) -> Unit = { }) {
+fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiState,onMovieClick: (movieId: String) -> Unit = { }) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Text("100 movies")
         state.movies.forEach { movie ->
@@ -199,7 +199,7 @@ fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
             modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
             headlineContent = { Text(movie.title) },
             overlineContent = { Text(movie.releaseYear.toString()) },
-            supportingContent = { Text(movie.genre) },
+            supportingContent = { Text(movie.genres.toString()) },
             leadingContent = {
                 Image(
                     painter = painterResource(image),

@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.ktorfit)
+    alias(libs.plugins.kotlinSerialization)
+
 }
 
 kotlin {
@@ -53,6 +57,8 @@ kotlin {
             api(libs.koin.core)
 
             implementation(libs.bundles.ktor)
+
+            implementation(libs.ktorfit.lib.light)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

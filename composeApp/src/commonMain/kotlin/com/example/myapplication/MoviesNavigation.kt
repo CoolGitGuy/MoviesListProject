@@ -48,7 +48,7 @@ fun MoviesNavigation(startDestination: String,) {
     }
 }
 
-private fun NavController.navigateToMovieDetails(movieId : Int) {
+private fun NavController.navigateToMovieDetails(movieId : String) {
     navigate("movies/$movieId")
 }
 
