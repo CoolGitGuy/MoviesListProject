@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.savedstate.read
 import com.example.myapplication.details.MovieDetailsScreen
+import com.example.myapplication.details.MovieDetailsViewModel
 import com.example.myapplication.list.MoviesListScreen
 import com.example.myapplication.list.MoviesListViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -42,8 +43,10 @@ fun MoviesNavigation(startDestination: String,) {
             )
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.read { getStringOrNull(MOVIE_ID) } ?: return@composable // Nisam znao kako ovo da izvucem :(
+            val viewModel = koinViewModel<MovieDetailsViewModel>()
 
             MovieDetailsScreen(
+                viewModel = viewModel,
                 movieId = movieId,
                 onClose = { navController.navigateUp() }
             )

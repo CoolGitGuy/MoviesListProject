@@ -15,11 +15,11 @@ interface MoviesListContract {
         val error: Throwable? = null
     )
 
-        sealed interface MoviesListIntent {
-            data class SortChanged(val sort: SortOption) : MoviesListIntent
-            data class MovieClicked(val movieId: String) : MoviesListIntent
-            data object RetryClicked : MoviesListIntent
-            data object LoadMovies : MoviesListIntent
-        }
+    sealed interface MoviesListIntent {
+        data class SortChanged(val sort: SortOption) : MoviesListIntent
+        data class MovieClicked(val movieId: String) : MoviesListIntent
+        data object RetryClicked : MoviesListIntent
+        data object LoadMovies : MoviesListIntent
+    }
 
 }

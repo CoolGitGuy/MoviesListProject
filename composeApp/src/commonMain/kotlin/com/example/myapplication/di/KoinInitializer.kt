@@ -2,6 +2,7 @@ package com.example.myapplication.di
 
 import com.example.myapplication.data.ApiMovieRepository
 import com.example.myapplication.data.InMemoryMovieRepository
+import com.example.myapplication.details.MovieDetailsViewModel
 import com.example.myapplication.domain.MovieRepository
 import com.example.myapplication.list.MoviesListViewModel
 import com.example.myapplication.networking.networkingModule
@@ -15,6 +16,7 @@ import org.koin.dsl.module
 val moviesModule = module {
     single { ApiMovieRepository(get()) } bind MovieRepository::class
     viewModelOf(::MoviesListViewModel)
+    viewModelOf(::MovieDetailsViewModel)
 }
 
 fun initKoin(config: KoinAppDeclaration? = null): KoinApplication {
