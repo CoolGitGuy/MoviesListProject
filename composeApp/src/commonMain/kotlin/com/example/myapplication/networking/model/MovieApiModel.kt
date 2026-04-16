@@ -60,3 +60,28 @@ data class MovieTrailerApiModel(
     val official: Boolean,
     val publishedAt: String? = null
 )
+
+@Serializable
+data class PersonSummary(
+    val imdbId: String,
+    val name: String,
+    val professions: String? = null,
+    val department: String? = null,
+    val profilePath: String? = null
+)
+
+@Serializable
+data class MovieImagesAPI(
+    val posters: List<imageObject>? = emptyList(),
+    val backdrops: List<imageObject>? = emptyList(),
+    val logos: List<imageObject>? = emptyList(),
+)
+
+@Serializable
+data class imageObject(
+    val filePath: String,
+    val width: Int? = null,
+    val height: Int? = null,
+    val voteAverage: Float? = null,
+    val language: String? = null
+)

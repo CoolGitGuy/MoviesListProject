@@ -1,12 +1,15 @@
 package com.example.myapplication.data
 
+import com.example.myapplication.domain.Cast
 import com.example.myapplication.domain.Movie
 import com.example.myapplication.domain.MovieDetails
 import com.example.myapplication.domain.MovieRepository
 import com.example.myapplication.list.SortOption
 import com.example.myapplication.networking.MovieApi
 import com.example.myapplication.networking.model.MovieDetailApiModel
+import com.example.myapplication.networking.model.MovieImagesAPI
 import com.example.myapplication.networking.model.MovieListItem
+import com.example.myapplication.networking.model.PersonSummary
 
 class ApiMovieRepository(
     private val api : MovieApi
@@ -18,6 +21,7 @@ class ApiMovieRepository(
         )
         var movies = response.items.map { it.toDomain() }
         movies.get(0).totalItems = response.totalItems
+
         return movies
     }
 
@@ -32,6 +36,17 @@ class ApiMovieRepository(
             .firstOrNull { it.site == "YouTube" }
             ?.key
             ?: ""
+    }
+
+    override suspend fun getMovieCast(id: String): List<Cast> {
+        val response = api.getMovieCast(id)
+
+        return response.items.map { it.toDomain() }
+    }
+
+    override suspend fun searchImages(id: String): List<String>? {
+        val response = api.getMovieImages(id)
+        return response.backdrops?.map{ it.filePath }
     }
 }
 
@@ -99,6 +114,14 @@ private fun MovieDetailApiModel.toDomain(): MovieDetails {
         collectionName = collection?.name,
         collectionPosterUrl = collection?.posterPath,
         collectionBackdropUrl = collection?.backdropPath
+    )
+}
+
+private fun PersonSummary.toDomain(): Cast {
+    return Cast(
+        id = imdbId,
+        name = name,
+        profileUrl = profilePath
     )
 }
 

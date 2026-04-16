@@ -1,9 +1,12 @@
 package com.example.myapplication.networking
 
+import com.example.myapplication.networking.model.GenreApiModel
 import com.example.myapplication.networking.model.MovieDetailApiModel
+import com.example.myapplication.networking.model.MovieImagesAPI
 import com.example.myapplication.networking.model.MovieListItem
 import com.example.myapplication.networking.model.MovieTrailerApiModel
 import com.example.myapplication.networking.model.PaginatedResponse
+import com.example.myapplication.networking.model.PersonSummary
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
@@ -30,5 +33,24 @@ interface MovieApi {
         @Path("id") id: String,
         @Query("type") type: String? = "Trailer" // stavio sam default na Trailer jer nam samo on treba
     ): List<MovieTrailerApiModel>
+
+    @GET("movies/{id}/cast")
+    suspend fun getMovieCast(
+        @Path("id") id: String,
+        @Query("page") page: Int? = 1, // Page number (must be >= 1).
+        @Query("page_size") pageSize: Int? = 10 // Items per page (1-100).
+    ): PaginatedResponse<PersonSummary>
+
+    @GET("genres")
+    suspend fun getGenres(
+        @Query("id") id: Int,
+        @Query("name") name: String
+    ): List<GenreApiModel>
+
+    @GET("movies/{id}/images")
+    suspend fun getMovieImages(
+        @Path("id") id: String,
+        @Query("type") type: String? = null
+    ): MovieImagesAPI
 
 }

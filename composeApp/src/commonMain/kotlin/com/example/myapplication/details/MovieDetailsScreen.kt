@@ -5,13 +5,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
@@ -70,7 +73,7 @@ private fun MovieDetailsScreen(
     onClose: () -> Unit,
     onPlayClick: () -> Unit
 ){
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Button(onClick = onClose,modifier = Modifier.padding(vertical = 8.dp)) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
@@ -87,7 +90,7 @@ private fun MovieDetailsScreen(
                 Icon(
                     imageVector = Icons.Default.Warning,
                     contentDescription = "Info icon",
-                    tint = Color.Red,
+                    tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.size(64.dp)
                 )
                 Text("Error: ${state.error.message}", modifier = Modifier.padding(start = 8.dp))
@@ -97,7 +100,7 @@ private fun MovieDetailsScreen(
                 Icon(
                     painter = painterResource(Res.drawable.movienotfound),
                     contentDescription = "Movie not found",
-                    tint = Color.Gray,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(64.dp)
                 )
                 Text("Movie not found", modifier = Modifier.padding(start = 8.dp))
@@ -119,6 +122,74 @@ private fun MovieDetailsScreen(
                 language = state.movie.languageCode ?: "N/A",
                 popularity = state.movie.popularity?.toString() ?: "N/A"
             )
+
+            Column {
+                Text(
+                    text = "Images", style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                LazyRow(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    state.images?.forEach { imagePath ->
+                        item {
+                            AsyncImage(
+
+                                model = "https://image.tmdb.org/t/p/w500$imagePath",
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(width = 200.dp, height = 120.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    }
+                }
+            }
+
+            Actors(state)
+            Spacer(modifier = Modifier.height(50.dp)) // samo da vidimo glumce :D
+        }
+    }
+}
+
+@Composable
+private fun Actors(state: MovieDetailsContract.UiState) {
+    Column {
+        Text(
+            text = "Actors", style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+        LazyRow(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            state.cast.forEach { actor ->
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.width(100.dp)
+                    ) {
+                        AsyncImage(
+                            model = "https://image.tmdb.org/t/p/w200${actor.profileUrl}",
+                            contentDescription = actor.name,
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(40.dp))
+                                .border(1.dp, Color.Gray, RoundedCornerShape(40.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                        Text(
+                            text = actor.name ?: "Unknown",
+                            style = MaterialTheme.typography.labelMedium,
+                            modifier = Modifier.padding(top = 4.dp),
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -162,7 +233,7 @@ fun InfoCard(
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
         Column(
             modifier = Modifier
@@ -261,8 +332,8 @@ fun PosterWithPlayButton(
 
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red,
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 onClick = onPlayClick,
                 modifier = Modifier.align(Alignment.Center)
