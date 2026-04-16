@@ -41,7 +41,7 @@ fun MoviesNavigation(startDestination: String,) {
             )
         ) {
             MovieDetailsScreen(
-                movieId = 1.toString(),
+                movieId = MOVIE_ID,
                 onClose = { navController.navigateUp() }
             )
         }

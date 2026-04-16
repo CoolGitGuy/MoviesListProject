@@ -56,8 +56,12 @@ fun MoviesListScreen(
 
     MoviesListScreen(
         state = state,
-        onMovieClick = onMovieClick
-
+        onMovieClick = onMovieClick,
+        onSortSelected = {
+            viewModel.onIntent(
+                MoviesListContract.MoviesListIntent.SortChanged(it)
+            )
+        }
     )
 }
 
@@ -65,15 +69,16 @@ fun MoviesListScreen(
 @Composable
 private fun MoviesListScreen(
     state: MoviesListContract.UiState,
-    onMovieClick: (movieId: Int) -> Unit
+    onMovieClick: (movieId: Int) -> Unit,
+    onSortSelected: (SortOption) -> Unit
 ) {
     Scaffold(
         topBar = {
             Column {
                 TopBarPremier()
                 SortChipMenu(
-                    selected = SortOption.Rating,
-                    onOptionSelected = {  }
+                    selected = state.selectedSort,
+                    onOptionSelected = onSortSelected
                 )
             }
         }
@@ -175,11 +180,7 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
         Text("100 movies")
         state.movies.forEach { movie ->
             MovieListItem(
-                headline = movie.title,
-                overline = movie.releaseYear.toString(),
-                supporting = movie.genre,
-                trailing1 = movie.rating.toString(),
-                trailing2 = "${movie.votes} votes",
+                movie = movie,
                 onClick = { onMovieClick(movie.id) }
             )
         }
@@ -189,19 +190,16 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
 
 @Composable
 fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
-                  headline : String = "headline", overline : String = "overline",
-                  supporting : String = "supporting",
-                  trailing1 : String = "trailing",
-                      trailing2 : String = "trailing2",
-                      onClick : () -> Unit) {
+                  movie: Movie,
+                  onClick : () -> Unit) {
     Surface(modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
         ListItem(
             modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
-            headlineContent = { Text(headline) },
-            overlineContent = { Text(overline) },
-            supportingContent = { Text(supporting) },
+            headlineContent = { Text(movie.title) },
+            overlineContent = { Text(movie.releaseYear.toString()) },
+            supportingContent = { Text(movie.genre) },
             leadingContent = {
                 Image(
                     painter = painterResource(image),
@@ -211,8 +209,8 @@ fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
             },
             trailingContent = {
                 Column {
-                    Text("⭐$trailing1", color = Color.Yellow)
-                    Text("$trailing2")
+                    Text("⭐${movie.rating.toString()}", color = Color.Yellow)
+                    Text("${movie.votes} votes")
                 }
             },
         )
