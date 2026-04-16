@@ -3,10 +3,13 @@ package com.example.myapplication.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.domain.MovieRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 
@@ -19,21 +22,23 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     private fun loadMovies(sort: SortOption) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true, error = null)
+            withContext(Dispatchers.IO){
+                _state.value = _state.value.copy(isLoading = true, error = null)
 
-            try {
-                val movies = movieRepository.getMovies(sort)
+                try {
+                    val movies = movieRepository.getMovies(sort)
 
-                _state.value = _state.value.copy(
-                    movies = movies,
-                    isLoading = false,
-                    error = null
-                )
-            } catch (error: Throwable) {
-                _state.value = _state.value.copy(
-                    isLoading = false,
-                    error = error
-                )
+                    _state.value = _state.value.copy(
+                        movies = movies,
+                        isLoading = false,
+                        error = null
+                    )
+                } catch (error: Throwable) {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = error
+                    )
+                }
             }
         }
     }

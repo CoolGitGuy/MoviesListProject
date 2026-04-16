@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -23,11 +25,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -74,6 +79,7 @@ private fun MoviesListScreen(
     onSortSelected: (SortOption) -> Unit
 ) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Column {
                 TopBarPremier()
@@ -121,6 +127,11 @@ private fun MoviesListScreen(
 @Composable
 fun TopBarPremier() {
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFF111111),
+            titleContentColor = Color(0xFFF5C518),
+            actionIconContentColor = Color(0xFFF5C518)
+        ),
         title = {
             Image(
                 painter = painterResource(Res.drawable.logoimdb),
@@ -193,10 +204,17 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
 fun MovieListItem(
                   movie: Movie,
                   onClick : () -> Unit) {
-    Surface(modifier = Modifier.padding(2.dp),
+    Surface(
+        modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
         ListItem(
+            colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                headlineColor = MaterialTheme.colorScheme.onSurface,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
             modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
             headlineContent = { Text(movie.title) },
             overlineContent = { Text(movie.releaseYear.toString()) },
@@ -213,13 +231,14 @@ fun MovieListItem(
             },
             trailingContent = {
                 Column {
-                    Text("⭐${movie.rating.toString()}", color = Color.Yellow)
+                    Text("⭐${movie.rating.toString()}", color = MaterialTheme.colorScheme.primary)
                     Text("${movie.votes} votes")
                 }
             },
         )
     }
 }
+
 
 private const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
 private fun Movie.posterImageUrl(): String? {

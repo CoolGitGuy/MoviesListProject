@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.savedstate.read
 import com.example.myapplication.details.MovieDetailsScreen
 import com.example.myapplication.list.MoviesListScreen
 import com.example.myapplication.list.MoviesListViewModel
@@ -39,9 +40,11 @@ fun MoviesNavigation(startDestination: String,) {
                     nullable = false
                 }
             )
-        ) {
+        ) { backStackEntry ->
+            val movieId = backStackEntry.arguments?.read { getStringOrNull(MOVIE_ID) } ?: return@composable // Nisam znao kako ovo da izvucem :(
+
             MovieDetailsScreen(
-                movieId = MOVIE_ID,
+                movieId = movieId,
                 onClose = { navController.navigateUp() }
             )
         }
