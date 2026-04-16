@@ -10,3 +10,4 @@ data class Movie(val id: String,
                  val rating: Float?,
                  val votes: Int?,
                  val posterUrl: String?)
+

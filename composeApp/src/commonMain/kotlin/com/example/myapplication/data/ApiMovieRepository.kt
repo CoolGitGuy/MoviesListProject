@@ -1,9 +1,11 @@
 package com.example.myapplication.data
 
 import com.example.myapplication.domain.Movie
+import com.example.myapplication.domain.MovieDetails
 import com.example.myapplication.domain.MovieRepository
 import com.example.myapplication.list.SortOption
 import com.example.myapplication.networking.MovieApi
+import com.example.myapplication.networking.model.MovieDetailApiModel
 import com.example.myapplication.networking.model.MovieListItem
 
 class ApiMovieRepository(
@@ -20,8 +22,15 @@ class ApiMovieRepository(
 
 
 
-    override suspend fun getById(id: String): Movie? {
-        TODO("Not yet implemented")
+    override suspend fun getMovieDetails(id: String): MovieDetails {
+            return api.getMovieById(id).toDomain()
+    }
+
+    override suspend fun getMovieTrailer(id: String): String {
+        return api.getMovieTrailer(id)
+            .firstOrNull { it.site == "YouTube" }
+            ?.key
+            ?: ""
     }
 }
 
@@ -54,3 +63,33 @@ private fun MovieListItem.toDomain(): Movie {
         posterUrl = posterPath
     )
 }
+
+private fun MovieDetailApiModel.toDomain(): MovieDetails {
+    return MovieDetails(
+        id = imdbId,
+        tmdbId = tmdbId,
+        title = title,
+        originalTitle = originalTitle,
+        overview = overview,
+        tagline = tagline,
+        releaseDate = releaseDate,
+        year = year,
+        runtime = runtime,
+        budget = budget,
+        revenue = revenue,
+        languageCode = languageCode,
+        popularity = popularity,
+        imdbRating = imdbRating,
+        imdbVotes = imdbVotes,
+        tmdbRating = tmdbRating,
+        tmdbVotes = tmdbVotes,
+        posterUrl = posterPath,
+        backdropUrl = backdropPath,
+        homepage = homepage,
+        genres = genres.map { it.name },
+        collectionName = collection?.name,
+        collectionPosterUrl = collection?.posterPath,
+        collectionBackdropUrl = collection?.backdropPath
+    )
+}
+

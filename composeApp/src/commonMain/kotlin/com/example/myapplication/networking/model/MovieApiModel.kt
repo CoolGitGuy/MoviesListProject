@@ -50,3 +50,13 @@ data class MovieCollection(
     val posterPath: String? = null,
     val backdropPath: String? = null
 )
+
+@Serializable
+data class MovieTrailerApiModel(
+    val key: String,
+    val site: String,
+    val name: String? = null,
+    val type: String? = null,
+    val official: Boolean,
+    val publishedAt: String? = null
+)

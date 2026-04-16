@@ -6,6 +6,11 @@ import com.example.myapplication.di.initKoin
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        MyApplicationHolder.application = this
         initKoin()
     }
+}
+
+object MyApplicationHolder {
+    var application: Application? = null
 }

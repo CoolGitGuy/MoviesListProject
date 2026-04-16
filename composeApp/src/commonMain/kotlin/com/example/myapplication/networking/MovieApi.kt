@@ -1,8 +1,11 @@
 package com.example.myapplication.networking
 
+import com.example.myapplication.networking.model.MovieDetailApiModel
 import com.example.myapplication.networking.model.MovieListItem
+import com.example.myapplication.networking.model.MovieTrailerApiModel
 import com.example.myapplication.networking.model.PaginatedResponse
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
 interface MovieApi {
@@ -18,4 +21,14 @@ interface MovieApi {
         @Query("sort_by") sortBy: String? = "imdb_votes", // Sort field. One of: imdb_votes, year, imdb_rating, tmdb_rating, popularity, title
         @Query("sort_order") sortOrder: String? = "desc" // Sort direction: asc or desc.
     ): PaginatedResponse<MovieListItem>
+
+    @GET("movies/{id}")
+    suspend fun getMovieById(@Path("id") id: String): MovieDetailApiModel
+
+    @GET("movies/{id}/videos")
+    suspend fun getMovieTrailer(
+        @Path("id") id: String,
+        @Query("type") type: String? = "Trailer" // stavio sam default na Trailer jer nam samo on treba
+    ): List<MovieTrailerApiModel>
+
 }
