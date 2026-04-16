@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
-private const val BASE_URL = "https://rma.finlab.rs/movies/"
+private const val BASE_URL = "https://rma.finlab.rs/"
 
 val networkingModule = module {
     single {
@@ -35,6 +35,6 @@ val networkingModule = module {
             .httpClient(get<HttpClient>())
             .baseUrl(BASE_URL)
             .build()
-            .create<MovieApi>()
+            .createMovieApi()
     }
 }

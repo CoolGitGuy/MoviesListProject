@@ -35,7 +35,7 @@ fun MoviesNavigation(startDestination: String,) {
             route = "movies/{$MOVIE_ID}",
             arguments = listOf(
                 navArgument(MOVIE_ID) {
-                    type = NavType.IntType
+                    type = NavType.StringType
                     nullable = false
                 }
             )

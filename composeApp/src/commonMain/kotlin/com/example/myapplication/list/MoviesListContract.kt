@@ -17,7 +17,7 @@ interface MoviesListContract {
 
         sealed interface MoviesListIntent {
             data class SortChanged(val sort: SortOption) : MoviesListIntent
-            data class MovieClicked(val movieId: Int) : MoviesListIntent
+            data class MovieClicked(val movieId: String) : MoviesListIntent
             data object RetryClicked : MoviesListIntent
             data object LoadMovies : MoviesListIntent
         }

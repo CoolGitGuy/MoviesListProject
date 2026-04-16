@@ -59,6 +59,9 @@ kotlin {
             implementation(libs.bundles.ktor)
 
             implementation(libs.ktorfit.lib.light)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -94,6 +97,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+ktorfit {
+    compilerPluginVersion.set("2.3.3")
 }
 
 dependencies {

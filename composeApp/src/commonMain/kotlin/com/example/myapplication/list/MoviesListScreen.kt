@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.example.myapplication.domain.Movie
 import io.github.aakira.napier.Napier
 import myapplication.composeapp.generated.resources.Res
@@ -189,7 +190,7 @@ fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiStat
 }
 
 @Composable
-fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
+fun MovieListItem(
                   movie: Movie,
                   onClick : () -> Unit) {
     Surface(modifier = Modifier.padding(2.dp),
@@ -201,11 +202,14 @@ fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
             overlineContent = { Text(movie.releaseYear.toString()) },
             supportingContent = { Text(movie.genres.toString()) },
             leadingContent = {
-                Image(
-                    painter = painterResource(image),
+                AsyncImage(
+                    model = movie.posterImageUrl(),
                     contentDescription = "Poster filma",
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.size(84.dp),
+                    error = painterResource(Res.drawable.compose_multiplatform),
+                    fallback = painterResource(Res.drawable.compose_multiplatform)
                 )
+
             },
             trailingContent = {
                 Column {
@@ -215,4 +219,9 @@ fun MovieListItem(image: DrawableResource = Res.drawable.compose_multiplatform,
             },
         )
     }
+}
+
+private const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
+private fun Movie.posterImageUrl(): String? {
+    return posterUrl?.let { "$POSTER_BASE_URL$it" }
 }

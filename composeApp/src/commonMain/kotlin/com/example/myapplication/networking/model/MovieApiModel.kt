@@ -9,4 +9,10 @@ data class MovieListItem(val imdbId: String,
                          val imdbRating: Float? = null,
                          val imdbVotes: Int? = null,
                          val posterPath : String? = null,
-                         val genres: List<String>? = emptyList())
+                         val genres: List<GenreApiModel>? = emptyList())
+
+@Serializable
+data class GenreApiModel(
+    val id: Int,
+    val name: String
+)

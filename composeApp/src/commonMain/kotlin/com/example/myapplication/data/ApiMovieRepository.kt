@@ -48,7 +48,7 @@ private fun MovieListItem.toDomain(): Movie {
         id = imdbId,
         title = title,
         releaseYear = year,
-        genres = genres ?: emptyList(),
+        genres = genres?.map { it.name } ?: emptyList(),
         rating = imdbRating,
         votes = imdbVotes,
         posterUrl = posterPath
