@@ -189,7 +189,7 @@ fun SortChipMenu(
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier,state: MoviesListContract.UiState,onMovieClick: (movieId: String) -> Unit = { }) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
-        Text("100 movies")
+        Text("${state.movies.get(0).totalItems} movies")
         state.movies.forEach { movie ->
             MovieListItem(
                 movie = movie,

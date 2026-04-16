@@ -9,5 +9,6 @@ data class Movie(val id: String,
                  val genres: List<String>,
                  val rating: Float?,
                  val votes: Int?,
-                 val posterUrl: String?)
+                 val posterUrl: String?,
+                 var totalItems : Int? = null)
 

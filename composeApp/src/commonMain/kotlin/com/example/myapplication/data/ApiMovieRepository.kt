@@ -16,8 +16,9 @@ class ApiMovieRepository(
             sortBy = sort.toApiSortBy(),
             sortOrder = sort.toApiSortOrder()
         )
-
-        return response.items.map { it.toDomain() }
+        var movies = response.items.map { it.toDomain() }
+        movies.get(0).totalItems = response.totalItems
+        return movies
     }
 
 
@@ -36,19 +37,27 @@ class ApiMovieRepository(
 
 private fun SortOption.toApiSortBy(): String {
     return when (this) {
-        SortOption.Rating -> "imdb_rating"
-        SortOption.Year -> "year"
-        SortOption.Title -> "title"
-        SortOption.Popularity -> "popularity"
+        SortOption.RatingDESC -> "imdb_rating"
+        SortOption.RatingASC -> "imdb_rating"
+        SortOption.YearDESC -> "year"
+        SortOption.YearASC -> "year"
+        SortOption.TitleDESC -> "title"
+        SortOption.TitleASC -> "title"
+        SortOption.PopularityDESC -> "popularity"
+        SortOption.PopularityASC -> "popularity"
     }
 }
 
 private fun SortOption.toApiSortOrder(): String {
     return when (this) {
-        SortOption.Title -> "asc"
-        SortOption.Rating,
-        SortOption.Year,
-        SortOption.Popularity -> "desc"
+        SortOption.TitleDESC -> "desc"
+        SortOption.TitleASC -> "asc"
+        SortOption.RatingASC -> "asc"
+        SortOption.RatingDESC -> "desc"
+        SortOption.YearASC -> "asc"
+        SortOption.YearDESC -> "desc"
+        SortOption.PopularityDESC -> "desc"
+        SortOption.PopularityASC -> "asc"
     }
 }
 
