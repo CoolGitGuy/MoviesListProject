@@ -42,15 +42,11 @@ interface MovieApi {
     ): PaginatedResponse<PersonSummary>
 
     @GET("genres")
-    suspend fun getGenres(
-        @Query("id") id: Int,
-        @Query("name") name: String
-    ): List<GenreApiModel>
+    suspend fun getGenres(): List<GenreApiModel>
 
     @GET("movies/{id}/images")
     suspend fun getMovieImages(
         @Path("id") id: String,
         @Query("type") type: String? = null
     ): MovieImagesAPI
-
 }

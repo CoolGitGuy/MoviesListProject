@@ -1,11 +1,13 @@
 package com.example.myapplication.data
 
 import com.example.myapplication.domain.Cast
+import com.example.myapplication.domain.Genre
 import com.example.myapplication.domain.Movie
 import com.example.myapplication.domain.MovieDetails
 import com.example.myapplication.domain.MovieRepository
 import com.example.myapplication.list.SortOption
 import com.example.myapplication.networking.MovieApi
+import com.example.myapplication.networking.model.GenreApiModel
 import com.example.myapplication.networking.model.MovieDetailApiModel
 import com.example.myapplication.networking.model.MovieImagesAPI
 import com.example.myapplication.networking.model.MovieListItem
@@ -14,13 +16,25 @@ import com.example.myapplication.networking.model.PersonSummary
 class ApiMovieRepository(
     private val api : MovieApi
 ) : MovieRepository {
-    override suspend fun getMovies(sort: SortOption): List<Movie> {
+    override suspend fun getMovies(
+        sort: SortOption,
+        query: String?,
+        minYear: Int?,
+        maxYear: Int?,
+        minRating: Float?,
+        genre: String?
+    ): List<Movie> {
         val response = api.getMovies(
             sortBy = sort.toApiSortBy(),
-            sortOrder = sort.toApiSortOrder()
+            sortOrder = sort.toApiSortOrder(),
+            title = query,
+            minYear = minYear,
+            maxYear = maxYear,
+            minRating = minRating,
+            genre = genre
         )
-        var movies = response.items.map { it.toDomain() }
-        movies.get(0).totalItems = response.totalItems
+        val movies = response.items.map { it.toDomain() }.toMutableList()
+        movies.firstOrNull()?.totalItems = response.totalItems
 
         return movies
     }
@@ -42,6 +56,10 @@ class ApiMovieRepository(
         val response = api.getMovieCast(id)
 
         return response.items.map { it.toDomain() }
+    }
+
+    override suspend fun getGenres(): List<Genre> {
+        return api.getGenres().map { it.toDomain() }
     }
 
     override suspend fun searchImages(id: String): List<String>? {
@@ -122,6 +140,13 @@ private fun PersonSummary.toDomain(): Cast {
         id = imdbId,
         name = name,
         profileUrl = profilePath
+    )
+}
+
+private fun GenreApiModel.toDomain(): Genre {
+    return Genre(
+        id = id.toString(),
+        name = name
     )
 }
 
