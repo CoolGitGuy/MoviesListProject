@@ -1,9 +1,14 @@
 package com.example.myapplication.domain
 
-data class Movie(val id: Int,
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Movie(val id: String,
                  val title: String,
-                 val releaseYear: Int,
-                 val genre: String,
-                 val rating: Double,
-                 val votes: Int,
-                 val posterUrl: String)
+                 val releaseYear: Int?,
+                 val genres: List<String>,
+                 val rating: Float?,
+                 val votes: Int?,
+                 val posterUrl: String?,
+                 var totalItems : Int? = null)
+
